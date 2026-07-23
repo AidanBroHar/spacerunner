@@ -1,20 +1,23 @@
 import onnx
-import onnxruntime as ort
+import spacerunner.services.quantization_service as quantization_service
+#import onnxruntime as ort
+import tvm as relay
 
 def compile(model_path, target_hardware="riscv32", quantization=None, optimization=None):
     """Compile a ML model from a given path."""
     model = onnx.load(model_path)
     onnx.checker.check_model(model)
     graph = model.graph
+
+    relay_module = relay.frontend.from_onnx(model)
+
     
     # TODO: OPTIMIZE, QUANTIZE, AND CODEGEN PIPELINES GO HERE
     if optimization:
-        # Apply optimization techniques
         pass
 
     if quantization:
-        # Apply quantization techniques
-        pass
+        quantization_service(relay_module)
 
     # TODO: Generate C runtime code for RISC-V
     model_bin = b"\x00\x01\x02\x03"

@@ -1,2 +1,0 @@
-def quantize():
-    pass
